@@ -1,0 +1,11 @@
+node_modules
+.next
+dist
+package-lock.json
+public
+app/favicon.ico
+app/icon.png
+app/apple-icon.png
+test-results
+playwright-report
+next-env.d.ts
