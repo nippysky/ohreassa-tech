@@ -26,7 +26,7 @@ export default async function ContactPage() {
           what’s next<span className="orange-text">.</span>
         </h1>
         <p className="contact-intro">
-          A product question, a bigger project, or just a little guidance.
+          Solar products, professional installation, or help choosing a system.
           <br />
           Our team is here to help you take the next step.
         </p>
@@ -91,7 +91,7 @@ export default async function ContactPage() {
           </a>
         )}
       </section>
-      <Faq />
+      <Faq content={settings.content} />
     </>
   );
 }

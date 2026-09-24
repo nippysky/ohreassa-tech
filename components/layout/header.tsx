@@ -21,7 +21,10 @@ export function Header({
   settings,
   categories,
 }: {
-  settings: StoreSettings;
+  settings: Pick<
+    StoreSettings,
+    "name" | "logo" | "announcement" | "whatsappNumber"
+  >;
   categories: Category[];
 }) {
   const pathname = usePathname();
@@ -85,6 +88,12 @@ export function Header({
                 </Link>
               </div>
             </div>
+            <Link
+              href="/services"
+              aria-current={pathname === "/services" ? "page" : undefined}
+            >
+              Solar solutions
+            </Link>
             <Link
               href="/about"
               aria-current={pathname === "/about" ? "page" : undefined}
@@ -182,6 +191,7 @@ export function Header({
                 name: c.name,
                 href: `/shop?category=${encodeURIComponent(c.slug)}`,
               })),
+              { name: "Solar solutions & services", href: "/services" },
               { name: "Our story", href: "/about" },
               { name: "Contact", href: "/contact" },
             ].map((link) => (

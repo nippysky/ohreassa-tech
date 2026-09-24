@@ -28,7 +28,12 @@ export default async function StoreLayout({
         }
       >
         <Header
-          settings={settings}
+          settings={{
+            name: settings.name,
+            logo: settings.logo,
+            announcement: settings.announcement,
+            whatsappNumber: settings.whatsappNumber,
+          }}
           categories={categories.map(({ _id, name, slug }) => ({
             _id,
             name,

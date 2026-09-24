@@ -14,6 +14,17 @@ export async function GET(request: NextRequest) {
     return new Response("Invalid image request", { status: 400 });
   }
   const settings = await getSettings();
+  if (
+    !productSlug &&
+    !categorySlug &&
+    request.nextUrl.searchParams.get("page") === "services"
+  ) {
+    return renderSocialImage({
+      settings,
+      heading: settings.content.services.title,
+      label: "SOLAR SOLUTIONS & SERVICES",
+    });
+  }
   if (productSlug) {
     const product = await getProduct(productSlug);
     if (!product) return new Response("Product not found", { status: 404 });

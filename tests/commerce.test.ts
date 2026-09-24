@@ -8,7 +8,7 @@ import {
 } from "../lib/commerce/pricing";
 import { checkoutRequestSchema } from "../lib/commerce/validation";
 import { whatsappProvider } from "../lib/commerce/whatsapp";
-import { storeDefaults } from "../lib/store";
+import { resolveStoreSettings, storeDefaults } from "../lib/store";
 import type { Customer, Product } from "../lib/commerce/types";
 
 const product: Product = {
@@ -209,7 +209,7 @@ test("WhatsApp request contains the confirmed number, quantities, prices and del
   });
   const url = new URL(result.url);
   assert.equal(url.hostname, "wa.me");
-  assert.equal(url.pathname, "/2348068244971");
+  assert.equal(url.pathname, "/2348122214307");
   assert.equal(url.searchParams.get("text"), result.message);
   for (const expected of [
     "Test Buyer",
@@ -245,5 +245,22 @@ test("pickup messages omit address fields and unsupported destination numbers fa
       settings: { ...storeDefaults, whatsappNumber: "0" },
       reference: "TEST",
     }),
+  );
+});
+
+test("existing CMS settings can add page-copy overrides without losing contact details or missing sections", () => {
+  const settings = resolveStoreSettings({
+    phone: "08011111111",
+    whatsappNumber: "2348022222222",
+    content: { hero: { title: "Updated by the store" } },
+  });
+  assert.equal(settings.phone, "08011111111");
+  assert.equal(settings.whatsappNumber, "2348022222222");
+  assert.equal(settings.content.hero.title, "Updated by the store");
+  assert.equal(settings.content.hero.accent, storeDefaults.content.hero.accent);
+  assert.deepEqual(settings.content.services, storeDefaults.content.services);
+  assert.deepEqual(
+    resolveStoreSettings({ content: { faq: { items: [] } } }).content.faq.items,
+    [],
   );
 });

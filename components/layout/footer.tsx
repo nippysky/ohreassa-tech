@@ -57,12 +57,12 @@ export async function Footer({
           </div>
           <div>
             <h3>Here to help</h3>
-            <Link href="/about">Our story</Link>
+            <Link href="/services">Solar solutions</Link>
+            <Link href="/services#installation">Installation & support</Link>
+            <Link href="/about">About us</Link>
             <Link href="/contact">Contact us</Link>
             <Link href="/contact#faq">Common questions</Link>
-            <a href={whatsappContact(settings.whatsappNumber)}>
-              Order on WhatsApp
-            </a>
+            <a href={whatsappContact(settings.whatsappNumber)}>WhatsApp us</a>
           </div>
           <div className="footer-contact">
             <h3>Let’s connect</h3>

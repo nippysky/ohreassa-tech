@@ -8,38 +8,37 @@ import {
   MessageCircle,
   Sun,
 } from "lucide-react";
+import type { WebsiteContent } from "@/lib/site-content";
 import { whatsappContact } from "@/lib/store";
 
-export function Hero({ whatsappNumber }: { whatsappNumber: string }) {
+export function Hero({
+  whatsappNumber,
+  content,
+}: {
+  whatsappNumber: string;
+  content: WebsiteContent;
+}) {
   return (
-    <section className="hero">
+    <section className="hero hero--solar">
       <div className="container hero-grid">
         <div className="hero-copy">
           <div className="eyebrow">
             <span className="orange-dot" /> ENERGY FOR WHAT MATTERS
           </div>
           <h1>
-            Life moves.
+            {content.hero.title}
             <br />
-            Keep it
-            <br />
-            <span>powered.</span>
-            <span className="heading-spark" aria-hidden="true">
-              ✳
-            </span>
+            <span>{content.hero.accent}</span>
           </h1>
-          <p>
-            From the first light to the last task. Discover reliable solar and
-            energy solutions for your home, your business, and everything in
-            between.
-          </p>
+          <p className="hero-lead">{content.hero.description}</p>
+          <p className="hero-detail">{content.hero.detail}</p>
           <div className="hero-actions">
             <Link href="/shop" className="button button-orange">
-              Find your power <ArrowUpRight size={19} />
+              Shop solar products <ArrowUpRight size={19} />
             </Link>
             <a className="text-link" href={whatsappContact(whatsappNumber)}>
               <MessageCircle size={18} />
-              Talk to an expert
+              Find my solar solution
             </a>
           </div>
           <div className="hero-footnote">
@@ -49,7 +48,7 @@ export function Hero({ whatsappNumber }: { whatsappNumber: string }) {
             </span>
             <span>
               <Check size={14} />
-              Local support, real people
+              Professional installation
             </span>
           </div>
         </div>

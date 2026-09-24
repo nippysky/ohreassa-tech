@@ -30,6 +30,6 @@ export const CATEGORIES_QUERY = defineQuery(
 export const SETTINGS_QUERY = defineQuery(
   `*[_type == "storeSettings" && _id == "storeSettings"][0]{
     _updatedAt,name,tagline,description,aboutText,email,phone,alternatePhone,whatsappNumber,address,openingHours,instagramUrl,announcement,
-    "logo": logo{"url": asset->url, alt}, seo{title, description}
+    "logo": logo{"url": asset->url, alt}, seo{title, description}, content
   }`,
 );

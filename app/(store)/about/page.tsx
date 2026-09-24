@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { HowItWorks, TrustBar } from "@/components/home/sections";
+import { TrustBar } from "@/components/home/sections";
+import { Experience, FinalCta } from "@/components/home/marketing";
 import { getSettings } from "@/sanity/lib/data";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -24,16 +25,12 @@ export default async function AboutPage() {
             HELLO. WE’RE {settings.name.toUpperCase()}.
           </div>
           <h1>
-            Good energy.
+            Reliable power.
             <br />
-            Greater possibilities<span className="orange-text">.</span>
+            <span className="orange-text">Made affordable.</span>
           </h1>
-          <p>
-            We believe dependable power should make life simpler. More time
-            doing what you love. More room to grow. More confidence in the
-            everyday.
-          </p>
-          <Link href="/shop" className="button button-orange">
+          <p>{settings.content.solution.description}</p>
+          <Link href="/services" className="button button-orange">
             Explore our solutions <ArrowUpRight size={18} />
           </Link>
         </div>
@@ -51,15 +48,7 @@ export default async function AboutPage() {
       <section className="section container about-story" data-reveal>
         <div>
           <div className="eyebrow">ROOTED IN REAL LIFE</div>
-          <h2>
-            For the place
-            <br />
-            you call home.
-            <br />
-            And the future
-            <br />
-            you’re building.
-          </h2>
+          <h2>{settings.content.approach.title}</h2>
         </div>
         <div>
           {settings.aboutText
@@ -73,7 +62,11 @@ export default async function AboutPage() {
           </Link>
         </div>
       </section>
-      <HowItWorks whatsappNumber={settings.whatsappNumber} />
+      <Experience content={settings.content} />
+      <FinalCta
+        content={settings.content}
+        whatsappNumber={settings.whatsappNumber}
+      />
     </>
   );
 }

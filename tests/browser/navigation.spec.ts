@@ -26,7 +26,8 @@ test("shop navigation shows its shell without waiting for search parameters", as
   await page.goto("/");
   await instant(page, async () => {
     await page
-      .getByRole("link", { name: "Find your power", exact: true })
+      .locator(".hero")
+      .getByRole("link", { name: "Shop solar products", exact: true })
       .click();
     await expect(page).toHaveURL(/\/shop$/);
     await expect(

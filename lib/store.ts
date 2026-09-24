@@ -1,4 +1,10 @@
 import type { ProductImage, SeoContent } from "./commerce/types";
+import {
+  contentDefaults,
+  resolveWebsiteContent,
+  type WebsiteContent,
+  type WebsiteContentInput,
+} from "./site-content";
 
 export type StoreSettings = {
   _updatedAt?: string;
@@ -16,29 +22,37 @@ export type StoreSettings = {
   announcement: string;
   logo?: ProductImage | null;
   seo?: SeoContent | null;
+  content: WebsiteContent;
 };
 
 // Initial editor values and first-run presentation only. Published Sanity settings take precedence.
 export const storeDefaults: StoreSettings = {
   name: "Ohreassa Technology",
-  tagline: "Reliable power. A world of possibilities.",
+  tagline:
+    "Reliable, affordable solar power solutions for Nigerian homes and businesses.",
   description:
-    "Energy solutions for homes, businesses and everyday life. Explore our products and order with our team on WhatsApp.",
+    "Quality solar panels, lithium batteries, inverters and professional installation for Nigerian homes and businesses. Reliable power, made affordable.",
   aboutText:
-    "We bring together practical energy solutions to help people keep their homes, businesses and everyday lives moving.\n\nOur team helps homeowners, business owners, installers and resellers compare products and make informed choices. Whether you’re starting small or planning something bigger, a conversation is a good place to begin.\n\nOur role goes beyond a product on a shelf. We’re here to help with the details, from choosing a suitable solution to understanding your order and getting support.",
+    "For over 7 years, Ohreassa Technology has helped homes and businesses across Nigeria move toward more reliable power.\n\nWe provide quality, affordable solar solutions designed around how you actually use electricity. Whether you need backup power for your home, reliable energy for your business, or a complete solar system, we’ll help you find the right solution for your needs and budget.\n\nOur commitment doesn’t stop at the sale. From choosing the right product to installation and after-sales support, we’re with you throughout the journey.",
   email: "ohreassatechnology20@gmail.com",
   phone: "08068244971",
-  alternatePhone: "08122214307",
-  whatsappNumber: "2348068244971",
+  alternatePhone: "",
+  whatsappNumber: "2348122214307",
   address:
     "No. 2, St. Patrick’s Road, Alaba International Market, Ojo, Lagos, Nigeria",
   instagramUrl: "https://www.instagram.com/ohreassa_technology/",
   openingHours: "",
-  announcement: "A brighter everyday starts with reliable power.",
+  announcement:
+    "Reliable power. Made affordable. Solar solutions across Nigeria.",
+  content: contentDefaults,
 };
 
 export function resolveStoreSettings(
-  settings: Partial<StoreSettings> | null,
+  settings:
+    | (Omit<Partial<StoreSettings>, "content"> & {
+        content?: WebsiteContentInput | null;
+      })
+    | null,
 ): StoreSettings {
   if (!settings) return storeDefaults;
   const defined = Object.fromEntries(
@@ -54,6 +68,7 @@ export function resolveStoreSettings(
     instagramUrl: settings.instagramUrl || "",
     openingHours: settings.openingHours || "",
     logo: settings.logo || null,
+    content: resolveWebsiteContent(settings.content),
   };
 }
 

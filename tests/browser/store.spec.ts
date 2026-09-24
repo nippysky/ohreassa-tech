@@ -27,7 +27,9 @@ test("home, navigation, search, FAQ and responsive width", async ({
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: /Life moves/ })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /Reliable Power/ }),
+  ).toBeVisible();
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= window.innerWidth,
@@ -35,12 +37,12 @@ test("home, navigation, search, FAQ and responsive width", async ({
   ).toBe(true);
   await page
     .locator("#main summary:visible")
-    .filter({ hasText: "How do I place an order?" })
+    .filter({ hasText: "What solar system do I need for my home?" })
     .click();
   await expect(
     page
       .locator("#main")
-      .getByText(/Choose your products and quantities, then enter/),
+      .getByText(/It depends on the appliances you want to power/),
   ).toBeVisible();
   if (isMobile) {
     await page.getByRole("button", { name: "Open menu" }).click();
@@ -150,7 +152,7 @@ test("bulk cart and delivery checkout prepare the correct WhatsApp request witho
     ),
   ).toBe(true);
   await page.getByRole("button", { name: "Continue to WhatsApp" }).click();
-  await expect.poll(() => whatsappUrl).toContain("https://wa.me/2348068244971");
+  await expect.poll(() => whatsappUrl).toContain("https://wa.me/2348122214307");
   const message = new URL(whatsappUrl).searchParams.get("text");
   expect(message).toContain("Test Customer");
   expect(message).toContain("Qty: 6");
@@ -226,7 +228,7 @@ test("pickup checkout pauses for changed prices before the WhatsApp handoff", as
   await expect(page.locator(".summary-total")).toContainText("₦510,000");
   expect(whatsappUrl).toBe("");
   await page.getByRole("button", { name: "Continue to WhatsApp" }).click();
-  await expect.poll(() => whatsappUrl).toContain("https://wa.me/2348068244971");
+  await expect.poll(() => whatsappUrl).toContain("https://wa.me/2348122214307");
   const message = new URL(whatsappUrl).searchParams.get("text");
   expect(message).toContain("₦510,000");
   expect(message).toContain("Pickup Customer");

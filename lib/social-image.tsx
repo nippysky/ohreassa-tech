@@ -28,8 +28,8 @@ async function sanityPicture(
 
 export async function renderSocialImage({
   settings,
-  heading = "Life moves.\nKeep it powered.",
-  label = "ENERGY FOR YOUR EVERYDAY",
+  heading = `${settings.content.hero.title}\n${settings.content.hero.accent}`,
+  label = "SOLAR SOLUTIONS FOR NIGERIA",
   image,
   product = false,
 }: {
@@ -97,7 +97,7 @@ export async function renderSocialImage({
           <span style={{ fontSize: 20, color: "#e95312" }}>
             {product
               ? "View product · Order on WhatsApp"
-              : "Explore a world of possibilities."}
+              : "Solar products · Installation · Expert advice"}
           </span>
           <span style={{ fontSize: 16, color: "#727772" }}>
             {settings.name}

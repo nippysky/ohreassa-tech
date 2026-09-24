@@ -5,13 +5,15 @@ import { businessJsonLd, pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Hero } from "@/components/home/hero";
+import { Collections, Faq, TrustBar } from "@/components/home/sections";
 import {
-  Collections,
-  Faq,
-  HowItWorks,
-  Lifestyle,
-  TrustBar,
-} from "@/components/home/sections";
+  PowerStory,
+  SolarSolutions,
+  PersonalAdvice,
+  WhyOhreassa,
+  Experience,
+  FinalCta,
+} from "@/components/home/marketing";
 import { ProductCard } from "@/components/store/product-card";
 import {
   getCatalog,
@@ -23,7 +25,8 @@ import {
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
   return pageMetadata(settings, {
-    title: settings.seo?.title || "Energy solutions in Nigeria",
+    title:
+      settings.seo?.title || "Reliable, affordable solar solutions in Nigeria",
     description: settings.seo?.description || settings.description,
     path: "/",
   });
@@ -62,9 +65,16 @@ export default async function Home() {
   return (
     <>
       <StructuredData data={businessJsonLd(settings)} />
-      <Hero whatsappNumber={settings.whatsappNumber} />
+      <Hero
+        content={settings.content}
+        whatsappNumber={settings.whatsappNumber}
+      />
       <TrustBar />
-      <Collections categories={categories} />
+      <PowerStory
+        content={settings.content}
+        whatsappNumber={settings.whatsappNumber}
+      />
+      <Collections categories={categories} content={settings.content} />
       <Suspense
         fallback={
           <div
@@ -79,9 +89,21 @@ export default async function Home() {
       >
         <FeaturedProducts />
       </Suspense>
-      <Lifestyle />
-      <HowItWorks whatsappNumber={settings.whatsappNumber} />
-      <Faq />
+      <SolarSolutions
+        content={settings.content}
+        whatsappNumber={settings.whatsappNumber}
+      />
+      <PersonalAdvice
+        content={settings.content}
+        whatsappNumber={settings.whatsappNumber}
+      />
+      <WhyOhreassa content={settings.content} />
+      <Experience content={settings.content} />
+      <Faq content={settings.content} />
+      <FinalCta
+        content={settings.content}
+        whatsappNumber={settings.whatsappNumber}
+      />
     </>
   );
 }

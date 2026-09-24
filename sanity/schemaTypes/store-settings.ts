@@ -10,9 +10,16 @@ export const storeSettings = defineType({
     { name: "business", title: "Business & branding", default: true },
     { name: "contact", title: "Contact & pickup" },
     { name: "content", title: "Website text" },
+    { name: "pages", title: "Homepage & services" },
     { name: "seo", title: "Search & sharing" },
   ],
   fields: [
+    defineField({
+      name: "content",
+      title: "Homepage & services copy",
+      type: "websiteContent",
+      group: "pages",
+    }),
     defineField({
       name: "seo",
       title: "Homepage search & sharing",
@@ -88,14 +95,14 @@ export const storeSettings = defineType({
     defineField({
       name: "phone",
       group: "contact",
-      title: "Primary phone",
+      title: "Phone for calls",
       type: "string",
       validation: (r) => r.required().max(24),
     }),
     defineField({
       name: "alternatePhone",
       group: "contact",
-      title: "Alternate phone",
+      title: "Additional phone for calls (optional)",
       type: "string",
       validation: (r) => r.max(24),
     }),
@@ -105,7 +112,7 @@ export const storeSettings = defineType({
       title: "WhatsApp order number",
       type: "string",
       description:
-        "International digits only, e.g. 2348068244971. No +, spaces, or leading zero. All order requests go to this number.",
+        "International digits only, e.g. 2348122214307. No +, spaces, or leading zero. All WhatsApp orders and service enquiries go to this number. Keep the voice-call number in Phone for calls.",
       validation: (r) =>
         r
           .required()
