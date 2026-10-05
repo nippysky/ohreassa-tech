@@ -29,7 +29,7 @@ export const whatsappProvider: CheckoutProvider = {
       "",
       "ORDER DETAILS",
       ...quote.lines.flatMap((line, i) => [
-        `${i + 1}. ${clean(line.name)} (${clean(line.sku)})`,
+        `${i + 1}. ${clean(line.name)}`,
         `Qty: ${line.quantity} × ${formatMoney(line.unitPrice)} = ${formatMoney(line.lineTotal)}`,
         ...(line.pricing !== "standard"
           ? [`${line.pricing === "bulk" ? "Bulk" : "Sale"} price applied`]

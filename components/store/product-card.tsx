@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { productExcerpt } from "@/lib/commerce/product-content";
 import { ArrowUpRight, Package } from "lucide-react";
 import type { Product } from "@/lib/commerce/types";
 import { formatMoney, productPrice } from "@/lib/commerce/pricing";
@@ -48,11 +49,13 @@ export function ProductCard({
         </span>
       </Link>
       <div className="product-card-details">
-        <span className="eyebrow">{product.category?.name}</span>
+        {product.category && (
+          <span className="eyebrow">{product.category.name}</span>
+        )}
         <h3>
           <Link href={`/shop/${product.slug}`}>{product.name}</Link>
         </h3>
-        <p>{product.summary}</p>
+        <p>{productExcerpt(product.description)}</p>
         <div className="product-price">
           <strong>{formatMoney(unitPrice)}</strong>
           {unitPrice < regularPrice && <del>{formatMoney(regularPrice)}</del>}

@@ -1284,12 +1284,6 @@ input[type="radio"] {
   line-height: 1.2;
   margin-block: 13px 12px;
 }
-.model-label {
-  color: #919685;
-  font-size: 9px;
-  letter-spacing: 0.09em;
-  display: block;
-}
 .product-summary {
   font-size: 13px;
   margin-top: 23px;
@@ -1521,9 +1515,6 @@ input[type="radio"] {
 }
 .cart-item-content h3 {
   font-size: 15px;
-}
-.cart-item-content .model-label {
-  margin-top: 5px;
 }
 .cart-item-controls {
   display: flex;

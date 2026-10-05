@@ -103,7 +103,6 @@ export function buildQuote(
         productId,
         name: product.name,
         slug: product.slug,
-        sku: product.sku,
         image: product.images?.[0] || null,
         quantity,
         ...price,

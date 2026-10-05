@@ -15,9 +15,7 @@ const product: Product = {
   _id: "test-inverter",
   name: "Test inverter",
   slug: "test-inverter",
-  sku: "TEST-01",
   category: { name: "Inverters", slug: "inverters" },
-  summary: "Test fixture only",
   description: "Not published inventory",
   images: [],
   price: 500000,
@@ -211,6 +209,9 @@ test("WhatsApp request contains the confirmed number, quantities, prices and del
   assert.equal(url.hostname, "wa.me");
   assert.equal(url.pathname, "/2348122214307");
   assert.equal(url.searchParams.get("text"), result.message);
+  assert.match(result.message, /1\. Test inverter\nQty: 6/);
+  assert.ok(!result.message.includes("undefined"));
+  assert.ok(!result.message.includes("()"));
   for (const expected of [
     "Test Buyer",
     "08000000000",

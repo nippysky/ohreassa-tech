@@ -7,7 +7,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!isIndexableSite()) return [];
   const { products, categories } = await getCatalog();
   const populatedCategories = categories.filter((category) =>
-    products.some((product) => product.category.slug === category.slug),
+    products.some((product) => product.category?.slug === category.slug),
   );
   return [
     ...[
@@ -25,7 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: [
         category._updatedAt,
         ...products
-          .filter((p) => p.category.slug === category.slug)
+          .filter((p) => p.category?.slug === category.slug)
           .map((p) => p._updatedAt),
       ]
         .filter((value): value is string => !!value)

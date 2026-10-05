@@ -17,6 +17,7 @@ import {
   productPrice,
 } from "@/lib/commerce/pricing";
 import { whatsappContact } from "@/lib/store";
+import { productExcerpt } from "@/lib/commerce/product-content";
 import type { Product } from "@/lib/commerce/types";
 import { useCart } from "./cart-provider";
 import { ProductGallery } from "./product-gallery";
@@ -48,15 +49,18 @@ export function ProductDetail({
         name={product.name}
       />
       <div className="product-info">
-        <Link
-          href={`/shop?category=${encodeURIComponent(product.category.slug)}`}
-          className="eyebrow"
-        >
-          {product.category.name}
-        </Link>
+        {product.category && (
+          <Link
+            href={`/shop?category=${encodeURIComponent(product.category.slug)}`}
+            className="eyebrow"
+          >
+            {product.category.name}
+          </Link>
+        )}
         <h1>{product.name}</h1>
-        <span className="model-label">MODEL: {product.sku}</span>
-        <p className="product-summary">{product.summary}</p>
+        <p className="product-summary">
+          {productExcerpt(product.description, 220)}
+        </p>
         <div className="detail-price">
           <strong>{formatMoney(unitPrice)}</strong>
           {unitPrice < regularPrice && <del>{formatMoney(regularPrice)}</del>}
@@ -124,7 +128,7 @@ export function ProductDetail({
           className="product-question"
           href={whatsappContact(
             whatsappNumber,
-            `Hello! I’d like to know more about ${product.name} (${product.sku}).`,
+            `Hello! I’d like to know more about ${product.name}.`,
           )}
         >
           <MessageCircle size={18} />

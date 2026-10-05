@@ -1,12 +1,18 @@
-import { defineArrayMember, defineField, defineType } from "sanity";
+import {
+  ALL_FIELDS_GROUP,
+  defineArrayMember,
+  defineField,
+  defineType,
+} from "sanity";
 
 const imageFields = [
   defineField({
     name: "alt",
-    title: "Image description",
+    title: "Describe this photo (optional)",
     type: "string",
-    description: "Describe this particular product photo for accessibility.",
-    validation: (r) => r.required().max(160),
+    description:
+      "Leave blank to use the product name. Add a description for a particular angle or detail if you wish.",
+    validation: (r) => r.max(160),
   }),
 ];
 
@@ -15,13 +21,39 @@ export const product = defineType({
   title: "Products",
   type: "document",
   groups: [
-    { name: "details", title: "Product details", default: true },
-    { name: "pricing", title: "Prices & discounts" },
-    { name: "inventory", title: "Availability" },
-    { name: "seo", title: "Search & sharing" },
+    { name: "details", title: "Product", default: true },
+    { name: "pricing", title: "Discounts (optional)" },
+    { name: "options", title: "More options" },
+    { ...ALL_FIELDS_GROUP, hidden: true },
+  ],
+  fieldsets: [
+    {
+      name: "photos",
+      title: "More photos (optional)",
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: "specifications",
+      title: "Features & warranty (optional)",
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: "availability",
+      title: "Availability (optional)",
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: "search",
+      title: "Search & sharing (optional)",
+      options: { collapsible: true, collapsed: true },
+    },
+    {
+      name: "saleDates",
+      title: "Schedule the discount (optional)",
+      options: { collapsible: true, collapsed: true },
+    },
   ],
   fields: [
-    defineField({ name: "seo", type: "seo", group: "seo" }),
     defineField({
       name: "name",
       title: "Product name",
@@ -30,58 +62,49 @@ export const product = defineType({
       validation: (r) => r.required().max(120),
     }),
     defineField({
-      name: "slug",
-      type: "slug",
+      name: "price",
+      title: "Price (₦)",
+      type: "number",
       group: "details",
-      options: { source: "name", maxLength: 100 },
-      validation: (r) => r.required(),
-    }),
-    defineField({
-      name: "sku",
-      title: "Model / SKU",
-      type: "string",
-      group: "details",
-      validation: (r) => r.required().max(60),
-    }),
-    defineField({
-      name: "category",
-      type: "reference",
-      to: [{ type: "category" }],
-      group: "details",
-      validation: (r) => r.required(),
-    }),
-    defineField({
-      name: "summary",
-      title: "Short description",
-      type: "text",
-      rows: 2,
-      group: "details",
-      validation: (r) => r.required().max(220),
+      description:
+        "Price for one item in naira. Enter numbers only, for example 500000.",
+      validation: (r) => r.required().positive().precision(2).max(1000000000),
     }),
     defineField({
       name: "description",
-      title: "Full description",
+      title: "Description",
       type: "text",
-      rows: 8,
+      rows: 6,
       group: "details",
+      description:
+        "Tell customers about this product, what it does and what is included. This is the only description you need to write.",
       validation: (r) => r.required().max(8000),
     }),
     defineField({
       name: "mainImage",
-      title: "Main product picture",
+      title: "Main photo",
       type: "image",
       group: "details",
       options: { hotspot: true },
       fields: imageFields,
       validation: (r) => r.required().assetRequired(),
+      description: "Upload the photo customers should see first.",
+    }),
+    defineField({
+      name: "category",
+      title: "Category (optional)",
+      type: "reference",
+      to: [{ type: "category" }],
+      group: "details",
       description:
-        "Required. This product’s cover photo appears in the shop, cart and first on its details page.",
+        "Choose a category to help customers find this product. You can add it later.",
     }),
     defineField({
       name: "gallery",
-      title: "Additional product pictures",
+      title: "Additional photos",
       type: "array",
       group: "details",
+      fieldset: "photos",
       of: [
         defineArrayMember({
           type: "image",
@@ -91,55 +114,14 @@ export const product = defineType({
         }),
       ],
       validation: (r) => r.max(7),
-      description:
-        "Optional. Add up to seven extra angles or detail photos for this product. Drag to reorder the thumbnails shown after its main picture.",
-    }),
-    defineField({
-      name: "specifications",
-      type: "array",
-      group: "details",
-      of: [
-        defineArrayMember({
-          type: "object",
-          fields: [
-            defineField({
-              name: "label",
-              type: "string",
-              validation: (r) => r.required().max(60),
-            }),
-            defineField({
-              name: "value",
-              type: "string",
-              validation: (r) => r.required().max(160),
-            }),
-          ],
-          preview: { select: { title: "label", subtitle: "value" } },
-        }),
-      ],
-    }),
-    defineField({
-      name: "warrantyMonths",
-      title: "Warranty (months)",
-      type: "number",
-      group: "details",
-      description:
-        "Use the current approved warranty for this product; do not assume.",
-      validation: (r) => r.integer().min(0).max(120),
-    }),
-    defineField({
-      name: "price",
-      title: "Regular unit price (₦)",
-      type: "number",
-      group: "pricing",
-      description:
-        "Enter naira, e.g. 500000. Checkout converts to integer kobo.",
-      validation: (r) => r.required().positive().precision(2).max(1000000000),
+      description: "Add up to seven extra photos. Drag to change their order.",
     }),
     defineField({
       name: "salePrice",
-      title: "Sale unit price (₦)",
+      title: "Discounted price (₦)",
       type: "number",
       group: "pricing",
+      description: "Optional. Leave blank to sell at the normal price.",
       validation: (r) =>
         r
           .positive()
@@ -148,39 +130,40 @@ export const product = defineType({
             (value, ctx) =>
               value == null ||
               value < Number(ctx.document?.price) ||
-              "Sale price must be below the regular price.",
+              "The discounted price must be lower than the normal price.",
           ),
     }),
     defineField({
       name: "saleStartsAt",
-      title: "Sale starts",
+      title: "Start date",
       type: "datetime",
       group: "pricing",
-      description: "Optional. Blank means the sale can start immediately.",
+      fieldset: "saleDates",
+      description: "Leave blank to start the discount immediately.",
     }),
     defineField({
       name: "saleEndsAt",
-      title: "Sale ends",
+      title: "End date",
       type: "datetime",
       group: "pricing",
-      description:
-        "Optional. Enter an end date to automatically stop the sale.",
+      fieldset: "saleDates",
+      description: "Leave blank to keep the discount until you remove it.",
       validation: (r) =>
         r.custom(
           (value, ctx) =>
             !value ||
             !ctx.document?.saleStartsAt ||
             Date.parse(value) > Date.parse(String(ctx.document.saleStartsAt)) ||
-            "The end must be after the start.",
+            "The end date must be after the start date.",
         ),
     }),
     defineField({
       name: "quantityPrices",
-      title: "Bulk unit prices",
+      title: "Bulk discounts (optional)",
       type: "array",
       group: "pricing",
       description:
-        "Per product, not across the cart. The confirmed bulk threshold is 6 units. The lowest eligible sale or bulk price wins; discounts never stack.",
+        "Only add this if buying several of this product gives a lower price per item. The usual offer starts at 6 items. Customers get the best available discount.",
       of: [
         defineArrayMember({
           name: "quantityPrice",
@@ -188,14 +171,14 @@ export const product = defineType({
           fields: [
             defineField({
               name: "minimumQuantity",
-              title: "Minimum quantity",
+              title: "Buy at least this many",
               type: "number",
               initialValue: 6,
               validation: (r) => r.required().integer().min(2).max(99),
             }),
             defineField({
               name: "unitPrice",
-              title: "Unit price (₦)",
+              title: "Price per item (₦)",
               type: "number",
               validation: (r) =>
                 r
@@ -206,7 +189,7 @@ export const product = defineType({
                     (value, ctx) =>
                       value == null ||
                       value <= Number(ctx.document?.price) ||
-                      "Bulk price must not exceed the regular price.",
+                      "The bulk price must not be higher than the normal price.",
                   ),
             }),
           ],
@@ -214,8 +197,8 @@ export const product = defineType({
             select: { quantity: "minimumQuantity", price: "unitPrice" },
             prepare({ quantity, price }) {
               return {
-                title: `${quantity}+ units`,
-                subtitle: `₦${Number(price).toLocaleString("en-NG")} per unit`,
+                title: `${quantity}+ items`,
+                subtitle: `₦${Number(price).toLocaleString("en-NG")} per item`,
               };
             },
           },
@@ -228,7 +211,7 @@ export const product = defineType({
           );
           return (
             new Set(quantities).size === quantities.length ||
-            "Each minimum quantity must be unique."
+            "Use a different minimum quantity for each bulk discount."
           );
         }),
     }),
@@ -236,42 +219,114 @@ export const product = defineType({
       name: "active",
       title: "Show in store",
       type: "boolean",
-      initialValue: false,
-      group: "inventory",
-      description: "Enable when details and prices are ready, then publish.",
+      initialValue: true,
+      group: "details",
+      description:
+        "On by default for new products. Click Publish when ready. Turn off to hide a product without deleting it.",
     }),
     defineField({
       name: "featured",
       title: "Feature on homepage",
       type: "boolean",
       initialValue: false,
-      group: "inventory",
+      group: "options",
+      description: "Optional. Highlight this product on the homepage.",
     }),
     defineField({
       name: "stockStatus",
       title: "Availability",
       type: "string",
       initialValue: "inStock",
+      group: "options",
+      fieldset: "availability",
       options: {
         list: [
-          { title: "In stock", value: "inStock" },
+          { title: "Available to order", value: "inStock" },
           { title: "Pre-order", value: "preorder" },
           { title: "Out of stock", value: "outOfStock" },
         ],
         layout: "radio",
       },
-      group: "inventory",
-      validation: (r) => r.required(),
+      description:
+        "Optional. Products are available to order unless you choose otherwise.",
     }),
     defineField({
       name: "stockQuantity",
       title: "Available quantity",
       type: "number",
-      group: "inventory",
+      group: "options",
+      fieldset: "availability",
       description:
-        "Optional. Limits each order request. WhatsApp requests do not reserve or decrement stock. Leave blank for availability confirmed by the team.",
+        "Optional. Leave blank if you confirm stock with the customer. If filled in, this limits the quantity in each order request.",
       validation: (r) => r.integer().min(0),
     }),
+    defineField({
+      name: "specifications",
+      title: "Extra product details",
+      type: "array",
+      group: "options",
+      fieldset: "specifications",
+      description:
+        "Optional. Add details such as capacity or dimensions if they are useful.",
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({
+              name: "label",
+              title: "Detail name",
+              type: "string",
+              validation: (r) => r.required().max(60),
+            }),
+            defineField({
+              name: "value",
+              title: "Value",
+              type: "string",
+              validation: (r) => r.required().max(160),
+            }),
+          ],
+          preview: { select: { title: "label", subtitle: "value" } },
+        }),
+      ],
+    }),
+    defineField({
+      name: "warrantyMonths",
+      title: "Warranty in months",
+      type: "number",
+      group: "options",
+      fieldset: "specifications",
+      description:
+        "Optional. Only enter the confirmed warranty for this product.",
+      validation: (r) => r.integer().min(0).max(120),
+    }),
+    defineField({
+      name: "slug",
+      title: "Custom page link",
+      type: "slug",
+      group: "options",
+      fieldset: "search",
+      options: { source: "name", maxLength: 100 },
+      description:
+        "Optional. A working product link is provided automatically. Use Generate only if you want a link based on the product name. Keep an existing link to avoid breaking shared URLs.",
+    }),
+    defineField({
+      name: "seo",
+      type: "seo",
+      group: "options",
+      fieldset: "search",
+    }),
   ],
-  preview: { select: { title: "name", subtitle: "sku", media: "mainImage" } },
+  preview: {
+    select: { title: "name", price: "price", media: "mainImage" },
+    prepare({ title, price, media }) {
+      return {
+        title,
+        media,
+        subtitle:
+          typeof price === "number"
+            ? `₦${price.toLocaleString("en-NG")}`
+            : "Add a price to publish",
+      };
+    },
+  },
 });

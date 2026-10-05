@@ -19,9 +19,9 @@ export function catalogView(
   const deals = param("deals") === "true";
   const filtered = products.filter(
     (product) =>
-      (!category || product.category.slug === category) &&
+      (!category || product.category?.slug === category) &&
       (!q ||
-        `${product.name} ${product.sku} ${product.summary}`
+        `${product.name} ${product.description}`
           .toLowerCase()
           .includes(q.toLowerCase())) &&
       (!deals || productPrice(product, 1, now).pricing === "sale"),

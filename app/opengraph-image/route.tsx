@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     return renderSocialImage({
       settings,
       heading: product.name,
-      label: product.category.name.toUpperCase(),
+      label: product.category?.name.toUpperCase() || "EXPLORE THE PRODUCT",
       image: product.images[0]?.url,
       product: true,
     });

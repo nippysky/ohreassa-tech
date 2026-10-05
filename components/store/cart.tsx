@@ -137,7 +137,6 @@ export function Cart({ whatsappNumber }: { whatsappNumber: string }) {
                       <Link href={`/shop/${line.slug}`}>
                         <h3>{line.name}</h3>
                       </Link>
-                      <span className="model-label">{line.sku}</span>
                       {line.pricing !== "standard" && (
                         <span className="bulk-hint">
                           {line.pricing === "bulk" ? "Bulk" : "Sale"} price

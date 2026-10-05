@@ -171,9 +171,8 @@ export function productJsonLd(
     "@type": "Product",
     "@id": `${url}#product`,
     name: product.name,
-    description: product.summary,
-    sku: product.sku,
-    category: product.category.name,
+    description: product.description,
+    ...(product.category ? { category: product.category.name } : {}),
     image: product.images.map((image) => image.url),
     url,
     ...(product.specifications?.length

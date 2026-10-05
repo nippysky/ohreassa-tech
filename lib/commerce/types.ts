@@ -7,9 +7,7 @@ export type Product = {
   seo?: SeoContent | null;
   name: string;
   slug: string;
-  sku: string;
-  category: { name: string; slug: string };
-  summary: string;
+  category: { name: string; slug: string } | null;
   description: string;
   images: ProductImage[];
   price: number;
@@ -39,7 +37,6 @@ export type QuoteLine = {
   productId: string;
   name: string;
   slug: string;
-  sku: string;
   image: ProductImage | null;
   quantity: number;
   unitPrice: number;

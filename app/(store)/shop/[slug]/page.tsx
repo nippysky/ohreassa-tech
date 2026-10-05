@@ -26,7 +26,7 @@ export async function generateMetadata({
   if (!product) notFound();
   return pageMetadata(settings, {
     title: product.seo?.title || product.name,
-    description: product.seo?.description || product.summary,
+    description: product.seo?.description || product.description,
     path: `/shop/${encodeURIComponent(product.slug)}`,
     shareImage: socialImage(settings, {
       kind: "product",
@@ -50,7 +50,9 @@ async function ProductContent({
     getPricingTime(),
   ]);
   if (!product) notFound();
-  const categoryPath = `/shop?category=${encodeURIComponent(product.category.slug)}`;
+  const categoryPath = product.category
+    ? `/shop?category=${encodeURIComponent(product.category.slug)}`
+    : null;
   return (
     <section className="container product-page">
       <StructuredData data={productJsonLd(product, settings, pricingTime)} />
@@ -58,7 +60,9 @@ async function ProductContent({
         data={breadcrumbJsonLd([
           { name: "Home", path: "/" },
           { name: "Shop", path: "/shop" },
-          { name: product.category.name, path: categoryPath },
+          ...(product.category && categoryPath
+            ? [{ name: product.category.name, path: categoryPath }]
+            : []),
           {
             name: product.name,
             path: `/shop/${encodeURIComponent(product.slug)}`,
@@ -70,8 +74,12 @@ async function ProductContent({
         <span>/</span>
         <Link href="/shop">Shop</Link>
         <span>/</span>
-        <Link href={categoryPath}>{product.category.name}</Link>
-        <span>/</span>
+        {product.category && categoryPath && (
+          <>
+            <Link href={categoryPath}>{product.category.name}</Link>
+            <span>/</span>
+          </>
+        )}
         <span>{product.name}</span>
       </div>
       <ProductDetail

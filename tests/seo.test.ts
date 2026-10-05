@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { catalogView } from "../lib/commerce/catalog";
+import { productExcerpt } from "../lib/commerce/product-content";
 import type { Category, Product } from "../lib/commerce/types";
 import {
   businessJsonLd,
@@ -21,9 +22,7 @@ const product: Product = {
   _id: "seo-fixture",
   name: "Test product",
   slug: "test-product",
-  sku: "TEST-SEO",
   category,
-  summary: "A test description",
   description: "Test-only inventory",
   images: [
     {
@@ -51,6 +50,47 @@ test("search offers match the one-unit sale price, never the six-unit discount",
     "500000.00",
   );
   assert.equal(data.offers.availability, "https://schema.org/InStock");
+});
+
+test("products without optional details stay searchable and have complete search metadata", () => {
+  const basic: Product = {
+    _id: "basic-product",
+    name: "Home backup battery",
+    slug: "basic-product",
+    description: "Reliable backup for a refrigerator and essential appliances.",
+    price: 500000,
+    images: [],
+    category: null,
+    stockStatus: "inStock",
+    featured: false,
+  };
+  assert.equal(
+    catalogView([basic], [category], { q: "refrigerator" }, now).filtered
+      .length,
+    1,
+  );
+  assert.equal(
+    catalogView([basic], [category], { category: category.slug }, now).filtered
+      .length,
+    0,
+  );
+  const data = productJsonLd(basic, storeDefaults, now);
+  assert.equal(data.description, basic.description);
+  assert.equal(data.category, undefined);
+  assert.equal("sku" in data, false);
+  assert.equal(data.offers.price, "500000.00");
+});
+
+test("product previews are generated from one description without changing the full text", () => {
+  const text =
+    "Backup power for your home.\n\nIncludes a battery and charger for everyday use.";
+  assert.equal(
+    productExcerpt(text),
+    "Backup power for your home. Includes a battery and charger for everyday use.",
+  );
+  assert.equal(productExcerpt(text, 30), "Backup power for your home.…");
+  assert.equal(productExcerpt(""), "");
+  assert.equal(productExcerpt("x".repeat(200), 30).length, 30);
 });
 
 test("sold-out quantities override preorder and in-stock search availability", () => {
@@ -159,7 +199,7 @@ test("page previews use current store identity and the product's own main image"
     { ...storeDefaults, name: "Updated store" },
     {
       title: product.name,
-      description: product.summary,
+      description: product.description,
       path: "/shop/test-product",
       shareImage,
       noIndex: true,
