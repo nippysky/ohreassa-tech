@@ -32,13 +32,15 @@ test("a basic product card renders without a category, SKU, separate summary or 
 
 test("a basic product detail renders and prepares a model-free product enquiry", () => {
   const html = renderToStaticMarkup(
-    createElement(CartProvider, {
-      children: createElement(ProductDetail, {
+    createElement(
+      CartProvider,
+      null,
+      createElement(ProductDetail, {
         product,
         pricingTime: 0,
         whatsappNumber: "2348122214307",
       }),
-    }),
+    ),
   );
   assert.ok(html.includes(product.description));
   assert.match(html, /Available to order/);

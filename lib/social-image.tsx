@@ -51,9 +51,9 @@ export async function renderSocialImage({
         display: "flex",
         width: "100%",
         height: "100%",
-        background: "#f7f7f2",
+        background: "#edf1fc",
         padding: "52px 60px",
-        color: "#202725",
+        color: "#16289a",
         gap: 40,
       }}
     >
@@ -99,7 +99,7 @@ export async function renderSocialImage({
               ? "View product · Order on WhatsApp"
               : "Solar products · Installation · Expert advice"}
           </span>
-          <span style={{ fontSize: 16, color: "#727772" }}>
+          <span style={{ fontSize: 16, color: "#53618a" }}>
             {settings.name}
           </span>
         </div>
@@ -109,7 +109,7 @@ export async function renderSocialImage({
           display: "flex",
           width: 430,
           height: "100%",
-          background: picture ? "#ffffff" : "#eeede4",
+          background: picture ? "#ffffff" : "#e3e9fa",
           borderRadius: 30,
           alignItems: "center",
           justifyContent: "center",

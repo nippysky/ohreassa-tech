@@ -4,6 +4,9 @@ import type { Product, ProductImage } from "./commerce/types";
 import { productPrice } from "./commerce/pricing";
 import { siteUrl, type StoreSettings } from "./store";
 
+// Bump when the sharing-card design changes so cached previews get a new URL.
+const SOCIAL_IMAGE_VERSION = 2;
+
 export function socialImage(
   settings: StoreSettings,
   content?: {
@@ -20,6 +23,7 @@ export function socialImage(
   const revision = createHash("sha256")
     .update(
       JSON.stringify([
+        SOCIAL_IMAGE_VERSION,
         settings._updatedAt,
         settings.name,
         settings.logo?.url,
